@@ -1,5 +1,8 @@
+import time
 from grovepi import *
 from grove_rgb_lcd import *
+import tabletteChecking
+import tometteChecking
 
 def printScreen(msg, R, G, B):
     # Test screen to avoid screen blinking
@@ -9,7 +12,29 @@ def printScreen(msg, R, G, B):
         setText(msg)
         setRGB(R, G, B)
 
+def printTest(statusCode, msg):
+    if statusCode:
+        printScreen(msg, 0, 128, 0)
+    else:
+        printScreen(msg, 128, 0, 0)
+
+def longButtonPress():
+    global button
+    buttonStatus = digitalRead(button)
+    time.sleep(0.2)
+    buttonStatusBis = digitalRead(button)
+    return buttonStatus == 1 and buttonStatusBis == 1
+
+def waitForButton():
+    buttonStatus = longButtonPress()
+    while not buttonStatus:
+        buttonStatus = longButtonPress()
+
+# Global variables
 screenText = ""
+testMode = None
+TABLETTE_MODE = 1
+TOMETTE_MODE = 2
 
 # Devices ports and modes
 button 		= 7			
@@ -20,24 +45,26 @@ pinMode(potentiometer, "INPUT")
 # Run checks
 while True:
     try:
-        testMode = analogRead(potentiometer)
-        if testMode < 512:	
+        potentValue = analogRead(potentiometer)
+        if potentValue < 512:	
             printScreen("Mode tablette. Press button...", 0, 128, 64)
+            testMode = TABLETTE_MODE
         else:
             printScreen("Mode tomette. Press button...", 128, 0, 64)
+            testMode = TOMETTE_MODE
     except (IOError, TypeError) as e:
         print "Warning: Error reading potentiometer"
-#	button_status= digitalRead(button)
-#	print button_status
+        continue
 
-#		if button_status:	#If the Button is in HIGH position, run the program
-#			digitalWrite(buzzer_pin,1)						
-#			# print "\tBuzzing"			
-#		else:		#If Button is in Off position, print "Off" on the screen
-#			digitalWrite(buzzer_pin,0)
-			# print "Off"			
-#	except KeyboardInterrupt:	# Stop the buzzer before stopping
-#		digitalWrite(buzzer_pin,0)
-#		break
-#	except (IOError,TypeError) as e:
-#		print "Error"
+    buttonStatus = longButtonPress()
+    if buttonStatus:
+        if testMode == TABLETTE_MODE:
+            printScreen("Tablette checking...", 128, 128, 128)
+            (statusCode, msg) = tabletteChecking.test()
+            printTest(statusCode, msg)
+            waitForButton()
+        elif testMode == TOMETTE_MODE:
+            printScreen("Tomette checking...", 128, 128, 128)
+            (statusCode, msg) = tometteChecking.test()
+            printTest(statusCode, msg)
+            waitForButton()
