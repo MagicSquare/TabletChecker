@@ -1,8 +1,12 @@
 import time
+import sys
+
 from grovepi import *
 from grove_rgb_lcd import *
+
 import tabletteChecking
 import tometteChecking
+import autoChecker
 
 def printScreen(msg, R, G, B):
     # Test screen to avoid screen blinking
@@ -42,15 +46,24 @@ pinMode(button,"INPUT")
 potentiometer	= 0
 pinMode(potentiometer, "INPUT")
 
+# Check if all is ok
+(statusCode, msg) = autoChecker.test()
+if statusCode == 1:
+    printScreen("Everything is OK\nPress button...", 0, 128, 0)
+    waitForButton()
+else:
+    printScreen("KO: " + msg, 128, 0, 0)
+    sys.exit(-1)
+
 # Run checks
 while True:
     try:
         potentValue = analogRead(potentiometer)
         if potentValue < 512:	
-            printScreen("Mode tablette. Press button...", 0, 128, 64)
+            printScreen("Mode tablette.\nPress button...", 0, 128, 64)
             testMode = TABLETTE_MODE
         else:
-            printScreen("Mode tomette. Press button...", 128, 0, 64)
+            printScreen("Mode tomette.\nPress button...", 128, 0, 64)
             testMode = TOMETTE_MODE
     except (IOError, TypeError) as e:
         print "Warning: Error reading potentiometer"
