@@ -4,8 +4,8 @@ import sys
 from grovepi import *
 from grove_rgb_lcd import *
 
-import tabletteChecking
-import tometteChecking
+#import tabletteChecker
+#import tometteChecker
 import autoChecker
 
 def printScreen(msg, R, G, B):
@@ -73,11 +73,11 @@ while True:
     if buttonStatus:
         if testMode == TABLETTE_MODE:
             printScreen("Tablette checking...", 128, 128, 128)
-            (statusCode, msg) = tabletteChecking.test()
-            printTest(statusCode, msg)
-            waitForButton()
+            #(statusCode, msg) = tabletteChecker.test()
+            #printTest(statusCode, msg)
+            #waitForButton()
         elif testMode == TOMETTE_MODE:
             printScreen("Tomette checking...", 128, 128, 128)
-            (statusCode, msg) = tometteChecking.test()
-            printTest(statusCode, msg)
-            waitForButton()
+            #(statusCode, msg) = tometteChecker.test()
+            #printTest(statusCode, msg)
+            #waitForButton()
