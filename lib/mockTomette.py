@@ -6,7 +6,7 @@ class MockTomette:
 
     def read(self, nbBytes):
         self.firstRead = False
-        return "Tomette"
+        return "12/4/C0C0C0C0C0C0C0C0C0C0C0C0900"
 
-    def inWating(self,):
+    def inWating(self):
         return self.firstRead

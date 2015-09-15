@@ -54,7 +54,7 @@ if statusCode == 1:
     printScreen("Everything is OK\nPress button...", 0, 128, 0)
     waitForButton()
 else:
-    printScreen("KO: " + msg, 128, 0, 0)
+    printScreen(msg, 128, 0, 0)
     sys.exit(-1)
 
 # Run checks
