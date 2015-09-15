@@ -1,11 +1,6 @@
-import time
+from serialChecker import SerialChecker
 
-class TometteChecker:
-    mockMode = False
-
-    def setMockMode(self):
-        self.mockMode = True
-
+class TometteChecker(SerialChecker):
     def test(self):
-        time.sleep(5)
-        return (1, "Tomette")
+        result = self.requestTablette()
+        return (1, result)

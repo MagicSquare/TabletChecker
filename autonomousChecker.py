@@ -4,9 +4,9 @@ import sys
 from grovepi import *
 from grove_rgb_lcd import *
 
-#import tabletteChecker
-#import tometteChecker
-import autoChecker
+from tabletteChecker import TabletteChecker
+from tometteChecker import TometteChecker
+import startupChecker
 
 def printScreen(msg, R, G, B):
     # Test screen to avoid screen blinking
@@ -39,6 +39,8 @@ screenText = ""
 testMode = None
 TABLETTE_MODE = 1
 TOMETTE_MODE = 2
+tabletteChecker = TabletteChecker()
+tometteChecker = TometteChecker()
 
 # Devices ports and modes
 button 		= 7			
@@ -47,7 +49,7 @@ potentiometer	= 0
 pinMode(potentiometer, "INPUT")
 
 # Check if all is ok
-(statusCode, msg) = autoChecker.test()
+(statusCode, msg) = startupChecker.test()
 if statusCode == 1:
     printScreen("Everything is OK\nPress button...", 0, 128, 0)
     waitForButton()
@@ -73,11 +75,11 @@ while True:
     if buttonStatus:
         if testMode == TABLETTE_MODE:
             printScreen("Tablette checking...", 128, 128, 128)
-            #(statusCode, msg) = tabletteChecker.test()
-            #printTest(statusCode, msg)
-            #waitForButton()
+            (statusCode, msg) = tabletteChecker.test()
+            printTest(statusCode, msg)
+            waitForButton()
         elif testMode == TOMETTE_MODE:
             printScreen("Tomette checking...", 128, 128, 128)
-            #(statusCode, msg) = tometteChecker.test()
-            #printTest(statusCode, msg)
-            #waitForButton()
+            (statusCode, msg) = tometteChecker.test()
+            printTest(statusCode, msg)
+            waitForButton()

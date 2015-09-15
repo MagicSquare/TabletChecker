@@ -1,12 +1,6 @@
-import time
+from serialChecker import SerialChecker
 
-class TabletteChecker:
-    mockMode = False    
-
-    def setMockMode(self):
-        self.mockMode = True
-
+class TabletteChecker(SerialChecker):
     def test(self):
-        print self.mockMode
-        time.sleep(5)
-        return (1, "Tablette")
+        result = self.requestTablette()
+        return (1, result)
