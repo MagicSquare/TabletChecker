@@ -1,5 +1,8 @@
 import time
 import sys
+import socket
+import fcntl
+import struct
 
 from grovepi import *
 from grove_rgb_lcd import *
@@ -7,6 +10,14 @@ from grove_rgb_lcd import *
 from tabletteChecker import TabletteChecker
 from tometteChecker import TometteChecker
 import startupChecker
+
+def get_ip_address(ifname):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    return socket.inet_ntoa(fcntl.ioctl(
+        s.fileno(),
+        0x8915,  # SIOCGIFADDR
+        struct.pack('256s', ifname[:15])
+    )[20:24])
 
 def printScreen(msg, R, G, B):
     # Test screen to avoid screen blinking
@@ -47,6 +58,20 @@ button 		= 7
 pinMode(button,"INPUT")		
 potentiometer	= 0
 pinMode(potentiometer, "INPUT")
+
+# Print IP
+nbTry = 0
+addressIP = "No IP"
+try:
+    addressIP = get_ip_address('wlan0')
+except IOError:
+    time.sleep(5)
+    try:
+        addressIP = get_ip_address('wlan0')
+    except IOError:
+        pass
+printScreen(addressIP + "\nPress button...", 128, 128, 128)
+waitForButton()
 
 # Check if all is ok
 (statusCode, msg) = startupChecker.test()
