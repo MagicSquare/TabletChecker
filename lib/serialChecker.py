@@ -8,6 +8,15 @@ class SerialChecker:
     __nbTomettesByLine = None
     __tomettesList = None
     __checksum = None
+    __tomettesTolerance = [
+        ['79', '75', '76', '77', '78', '7A', '7B', '7C', '7D', '7E'],
+        ['82', '7F', '80', '81', '83', '84', '85', '86', '87', '88'],
+        ['8B', '86', '87', '88', '89', '8A', '8C', '8D', '8E', '8F', '90'],
+        ['98', '93', '94', '95', '96', '97', '99', '9A', '9B', '9C', '9D'],
+        ['A2', '9E', '9F', 'A0', 'A1', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8'],
+        ['AD', 'A9', 'A0', 'AB', 'AC', 'AE', 'AF', 'B0', 'B1', 'B2', 'B3'],
+        ['C0', 'BB', 'BC', 'BD', 'BE', 'BF', 'C1', 'C2', 'C3', 'C4', 'C5']
+    ]
 
     def setMock(self, mock):
         self._mockModeOn = True
@@ -88,3 +97,9 @@ class SerialChecker:
             self.__tomettesList = tomettesArray
             self.__checkSum = checkSum
             return (1, "")
+
+    def getTometteValue(self, tomette):
+        for tolerance in self.__tomettesTolerance:
+            if tomette in tolerance:
+                return tolerance[0]
+        return tomette
