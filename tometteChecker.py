@@ -10,7 +10,9 @@ class TometteChecker(SerialChecker):
        
         tomettes = self.getTomettesList()
         for i in range(1, len(tomettes)):
-            if tomettes[i-1] != tomettes[i]:
+            prev = int(tomettes[i-1], 16)
+            next = int(tomettes[i], 16)
+            if (prev != 0) and (next != 0) and (prev != next):
                return (-1, "Diff:" + ''.join(tomettes))
 
         return (1, "Tomettes are identical !")
