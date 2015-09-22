@@ -52,7 +52,7 @@ class SerialChecker:
             print result
             lastResult = result
             time.sleep(1)
-            result = result + self._ser.read(1)
+            result = result + self._ser.read(40)
         print "Read : " + result
         
         # Remove L character
@@ -74,14 +74,14 @@ class SerialChecker:
             tometteValue = tomettes[i*2] + tomettes[i*2+1]
             tomettesSum += int(tometteValue, 16)
             tomettesArray.append(tometteValue)
+        tomettesSum = hex(tomettesSum)[-2:]
 
         checkSum = tomettes[int(nbTomettes)*2:]
         if not checkSum or len(checkSum) == 0:
             return (-1, "No checksum found")
-        checkSum = int(checkSum, 16)
 
-        if tomettesSum != checkSum :
-            return (-1, result)
+        if tomettesSum.strip().upper() != checkSum.strip().upper() :
+            return (-1, "Check:" + result)
         else:
             self.__nbTomettes = nbTomettes
             self.__nbTomettesByLine = nbTometteByLine
