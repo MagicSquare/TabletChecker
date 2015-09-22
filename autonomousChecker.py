@@ -28,7 +28,7 @@ def printScreen(msg, R, G, B):
         setRGB(R, G, B)
 
 def printTest(statusCode, msg):
-    if statusCode:
+    if statusCode == 1:
         printScreen(msg, 0, 128, 0)
     else:
         printScreen(msg, 128, 0, 0)

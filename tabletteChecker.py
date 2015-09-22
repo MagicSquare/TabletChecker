@@ -9,6 +9,7 @@ class TabletteChecker(SerialChecker):
                '8B', '79', '8B', '79']
 
     def test(self):
+        print "Launch tablette test"
         (statusCode, msg) = self.requestTablette()
 
         if statusCode != 1:
@@ -18,3 +19,7 @@ class TabletteChecker(SerialChecker):
             return (-1, "Diff:" + ''.join(self.getTomettesList()))
 
         return (1, "Tomettes are identical !")
+
+if __name__ == '__main__':
+    checker = TabletteChecker()
+    checker.test()

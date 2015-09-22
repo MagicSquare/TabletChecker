@@ -1,4 +1,5 @@
 import serial
+import time
 
 class SerialChecker:
     _ser = None
@@ -16,6 +17,7 @@ class SerialChecker:
         self._open()
         self._sendL()
         result = self._readTablette()
+        print result
         self._close()
         return self._extractData(result)
 
@@ -24,23 +26,40 @@ class SerialChecker:
 
     def _open(self):
         if not self._mockModeOn:
+            print "Open serial communication..."
             self._ser = serial.Serial('/dev/ttyAMA0',  9600, timeout = 1)
             self._ser.flush()
+            print "OK"
 
     def _close(self):
         if not self._mockModeOn:
             self._ser.close()
 
     def _sendL(self):
-        self._ser.write("L")
+        print "Send L"
+        nbBytesWritten = self._ser.write("L")
+        print "Write " + str(nbBytesWritten) + " bytes"
 
     def _readTablette(self):
+        if self._mockModeOn:
+            return self._ser.read(1)
         result = ""
-        while self._ser.inWating():
+        lastResult = ""
+        loop = True
+        while result == "" or result != lastResult:
+            print "Read 1 byte"
+            print lastResult
+            print result
+            lastResult = result
+            time.sleep(1)
             result = result + self._ser.read(1)
-        return result
+        print "Read : " + result
+        
+        # Remove L character
+        return result[1:]
 
     def _extractData(self, result):
+        print "Extracting " + result
         try:
              (nbTomettes, nbTometteByLine, tomettes) = result.split("/")
         except:
