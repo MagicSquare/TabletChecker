@@ -98,13 +98,17 @@ while True:
 
     buttonStatus = longButtonPress()
     if buttonStatus:
-        if testMode == TABLETTE_MODE:
-            printScreen("Tablette checking...", 128, 128, 128)
-            (statusCode, msg) = tabletteChecker.test()
-            printTest(statusCode, msg)
-            waitForButton()
-        elif testMode == TOMETTE_MODE:
-            printScreen("Tomette checking...", 128, 128, 128)
-            (statusCode, msg) = tometteChecker.test()
-            printTest(statusCode, msg)
+        try:
+            if testMode == TABLETTE_MODE:
+                printScreen("Tablette checking...", 128, 128, 128)
+                (statusCode, msg) = tabletteChecker.test()
+                printTest(statusCode, msg)
+                waitForButton()
+            elif testMode == TOMETTE_MODE:
+                printScreen("Tomette checking...", 128, 128, 128)
+                (statusCode, msg) = tometteChecker.test()
+                printTest(statusCode, msg)
+                waitForButton()
+        except:
+            printScreen("Unknown error...\nPress button...", 128, 0, 0)
             waitForButton()
